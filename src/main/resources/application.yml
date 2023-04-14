@@ -1,0 +1,13 @@
+mqtt:
+  url: tcp://127.0.0.1:1883
+  username: admin
+  password: admin123
+  client-id: test-client
+  subscribe-balance-count: 6
+  subscribes:
+    - topic: $share/test/admin/test
+      qos: 2
+    - topic: $share/test/admin/prod
+      qos: 2
+server:
+  port: 8080
