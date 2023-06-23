@@ -3,7 +3,6 @@ mqtt:
   username: admin
   password: admin123
   client-id: test-client
-  subscribe-balance-count: 6
   subscribes:
     - topic: $share/test/admin/test
       qos: 2

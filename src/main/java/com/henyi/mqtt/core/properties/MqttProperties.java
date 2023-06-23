@@ -24,7 +24,5 @@ public class MqttProperties {
 
     private String clientId;
 
-    private Integer subscribeBalanceCount;
-
     private List<SubscribeProperties> subscribes;
 }

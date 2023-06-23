@@ -2,7 +2,7 @@ package com.henyi.mqtt.web.service.impl;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;
-import com.henyi.mqtt.core.clients.MqttPublishClient;
+import com.henyi.mqtt.core.clients.MqttClient;
 import com.henyi.mqtt.core.domain.PublishRes;
 import com.henyi.mqtt.web.dto.PublishDto;
 import com.henyi.mqtt.web.service.MqttService;
@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets;
 public class MqttServiceImpl implements MqttService {
 
     @Resource
-    private MqttPublishClient mqttPublishClient;
+    private MqttClient mqttClient;
 
     @Override
     public PublishVo publish(PublishDto publishDto) throws MqttException {
@@ -33,7 +33,7 @@ public class MqttServiceImpl implements MqttService {
         message.setQos(publishDto.getQos());
         //设置是否在服务器中保存消息体,保留最新的消息到服务器上,以免订阅时丢失上一次最新的消息
         message.setRetained(true);
-        PublishRes publishRes = mqttPublishClient.publish(publishDto.getTopic(), message);
+        PublishRes publishRes = mqttClient.publish(publishDto.getTopic(), message);
         return Convert.convert(new TypeReference<PublishVo>() {
         }, publishRes);
     }

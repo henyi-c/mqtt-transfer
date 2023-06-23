@@ -1,6 +1,7 @@
 package com.henyi.mqtt.core.clients;
 
-import com.henyi.mqtt.core.callbacks.PublishCallback;
+
+import com.henyi.mqtt.core.callbacks.MqttCallBack;
 import com.henyi.mqtt.core.domain.PublishRes;
 import com.henyi.mqtt.core.properties.MqttProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -12,29 +13,31 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 /**
- * 发布消息初始化
+ * 订阅消息初始化
  *
  * @author henyi
  */
 @Slf4j
 @Component
-public class MqttPublishClient {
-
+public class MqttClient {
 
     @Resource
     private MqttProperties mqttProperties;
     @Resource
     private MyMqttConnectOptions mqttConnectOptions;
-    private MqttClient client;
+
+    private org.eclipse.paho.client.mqttv3.MqttClient client;
 
     @PostConstruct
     public void init() throws MqttException {
-        log.info("-----------连接发布初始化----------");
-        // MemoryPersistence设置clientId的保存形式，默认为以内存保存
-        client = new MqttClient(mqttProperties.getUrl(), mqttProperties.getClientId() + "_publish", new MemoryPersistence());
-        client.setCallback(new PublishCallback());
+        log.info("-----------连接订阅初始化----------");
+        // host为主机名，clientId即连接MQTT的客户端ID，一般以唯一标识符表示，MemoryPersistence设置clientId的保存形式，默认为以内存保存
+        client = new org.eclipse.paho.client.mqttv3.MqttClient(mqttProperties.getUrl(), mqttProperties.getClientId(), new MemoryPersistence());
+        // 设置回调
+        client.setCallback(new MqttCallBack(client));
         client.connect(mqttConnectOptions.getOptions());
     }
+
 
     //发送消息并获取回执
     public PublishRes publish(String topic, MqttMessage message) throws MqttException {
@@ -54,3 +57,5 @@ public class MqttPublishClient {
         return publishRes;
     }
 }
+
+

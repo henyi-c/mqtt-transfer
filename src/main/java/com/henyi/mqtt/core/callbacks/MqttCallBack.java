@@ -14,18 +14,18 @@ import java.util.List;
  * @author henyi
  */
 @Slf4j
-public class SubscribeCallBack implements MqttCallbackExtended {
+public class MqttCallBack implements MqttCallbackExtended {
 
 
     MqttClient client;
 
-    public SubscribeCallBack(MqttClient client) {
+    public MqttCallBack(MqttClient client) {
         this.client = client;
     }
 
     @Override
     public void connectionLost(Throwable throwable) {
-        log.warn("-----------订阅失败，进行重连-----------");
+        log.warn("-----------连接失败，进行重连-----------");
     }
 
     @Override
@@ -37,14 +37,14 @@ public class SubscribeCallBack implements MqttCallbackExtended {
             log.info("-----------接收消息Qos: " + mqttMessage.getQos());
             log.info("-----------接收消息内容: " + new String(mqttMessage.getPayload()));
         } catch (Exception e) {
-            log.error("-----------订阅消息返回报错: " + e.getMessage());
+            log.error("-----------处理消息返回报错: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
-        log.info("-----------订阅交付完成-----------" + iMqttDeliveryToken.isComplete());
+        log.info("-----------交付完成-----------" + iMqttDeliveryToken.isComplete());
     }
 
     @Override
@@ -61,7 +61,7 @@ public class SubscribeCallBack implements MqttCallbackExtended {
         } catch (MqttException e) {
             throw new RuntimeException(e);
         }
-        log.info("-----------初始化订阅连接完成-----------");
+        log.info("-----------初始化连接完成-----------");
     }
 
 }
